@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">firstHW</string>
+    <string name="first_massage">First massage</string>
+    <string name="changetext">ChangeText</string>
+    <string name="switch1">Switch1</string>
+    <string name="hello">Hello</string>
+    <string name="bye">bye</string>
+    <string name="name">Name</string>
+    <string name="set_name">Set Name</string>
 </resources>
