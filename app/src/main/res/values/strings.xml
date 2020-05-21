@@ -1,13 +1,2 @@
 <resources>
-    <string name="app_name">Test</string>
-    <string name="dmitrov">Dmitrov</string>
-    <string name="city_name">City name</string>
-    <string name="clear">Clear</string>
-    <string name="ok">OK</string>
-    <string name="check_wind_speed">Check wind speed</string>
-    <string name="_10">+10</string>
-    <string name="sun">Завтра - солнечно</string>
-    <string name="low_cloudy">Сегодня - небольшой дождь</string>
-    <string name="_25_05_2020">25.05.2020</string>
-    <string name="back">Назад</string>
 </resources>
