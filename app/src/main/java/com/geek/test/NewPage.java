@@ -21,4 +21,11 @@ public class NewPage extends AppCompatActivity {
         setContentView(R.layout.activity_new_page);
         initComponents();
     }
+    public void initComponents(){
+        temp = findViewById(R.id.temp);
+        today = findViewById(R.id.today);
+        tomorrow = findViewById(R.id.tomorrow);
+        date = findViewById(R.id.date);
+        mainIntent = new Intent(".MainActivity");
+    }
 }

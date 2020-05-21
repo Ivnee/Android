@@ -22,5 +22,20 @@ public class MainActivity extends AppCompatActivity {
         initComponents();
         addListener();
     }
-
+    private void initComponents(){
+     ok = findViewById(R.id.ok);
+     clear = findViewById(R.id.clear);
+     windSpeed = findViewById(R.id.checkWindSpeed);
+     editCity = findViewById(R.id.find_city);
+    }
+    private void addListener(){
+        ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent("com.geek.test.NewPage");
+                startActivity(intent);
+                Toast.makeText(getBaseContext(),"Информация о городе " + editCity.getText(),Toast.LENGTH_SHORT ).show();
+            }
+        });
+    }
 }
