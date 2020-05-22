@@ -10,4 +10,6 @@
     <string name="low_cloudy">Сегодня - небольшой дождь</string>
     <string name="_25_05_2020">25.05.2020</string>
     <string name="back">Назад</string>
+    <string name="Info_about">\"Информация о городе \"</string>
+    <string name="rain_light">rain_light</string>
 </resources>

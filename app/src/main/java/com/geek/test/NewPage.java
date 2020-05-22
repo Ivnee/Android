@@ -14,7 +14,6 @@ import org.w3c.dom.Text;
 public class NewPage extends AppCompatActivity {
     private TextView temp,today,tomorrow,date;
     private Button back;
-    private Intent mainIntent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,6 +25,13 @@ public class NewPage extends AppCompatActivity {
         today = findViewById(R.id.today);
         tomorrow = findViewById(R.id.tomorrow);
         date = findViewById(R.id.date);
-        mainIntent = new Intent(".MainActivity");
+    }
+    public void addListenerForReturn(){
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
     }
 }

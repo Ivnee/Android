@@ -34,7 +34,13 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent("com.geek.test.NewPage");
                 startActivity(intent);
-                Toast.makeText(getBaseContext(),"Информация о городе " + editCity.getText(),Toast.LENGTH_SHORT ).show();
+                Toast.makeText(getBaseContext(),getString(R.string.Info_about) + editCity.getText(),Toast.LENGTH_SHORT ).show();
+            }
+        });
+        clear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editCity.setText("");
             }
         });
     }
