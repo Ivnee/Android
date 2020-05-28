@@ -3,6 +3,8 @@
     <color name="colorPrimary">#EE0034</color>
     <color name="colorPrimaryDark">#B30006</color>
     <color name="colorAccent">#8F8F5D</color>
+    <color name="colorWind">#B3B33C</color>
     <color name="tempColor">#EAD57A</color>
     <color name="blue">#6AB5B8</color>
+    <color name="minusTempColor">#4274DF</color>\
 </resources>

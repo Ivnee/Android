@@ -78,4 +78,37 @@
         app:srcCompat="@drawable/cloud_light"
         android:contentDescription="@string/rain_light" />
 
+    <TextView
+        android:id="@+id/wind_spd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="80dp"
+        android:text=""
+        android:textSize="20sp"
+        android:textColor="@color/colorWind"
+        app:layout_constraintBottom_toTopOf="@+id/today"
+        app:layout_constraintStart_toStartOf="@+id/rain" />
+
+    <TextView
+        android:id="@+id/city_intent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:textColor="@color/tempColor"
+        android:text=""
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/wind_spd"
+        app:layout_constraintStart_toStartOf="@+id/rain" />
+
+    <Button
+        android:id="@+id/infoBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="90dp"
+        android:text="@string/info"
+        app:layout_constraintBottom_toBottomOf="@+id/back"
+        app:layout_constraintStart_toEndOf="@+id/back"
+        app:layout_constraintTop_toTopOf="@+id/back"
+        app:layout_constraintVertical_bias="0.0" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

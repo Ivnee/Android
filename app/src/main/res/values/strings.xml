@@ -12,4 +12,12 @@
     <string name="back">Назад</string>
     <string name="Info_about">\"Информация о городе \"</string>
     <string name="rain_light">rain_light</string>
+    <string name="on_start">OnStart</string>
+    <string name="on_stop">onStop</string>
+    <string name="on_restart">onRestart</string>
+    <string name="on_resume">onResume</string>
+    <string name="on_pause">onPause</string>
+    <string name="on_destroy">onDestroy</string>
+    <string name="wind_speed_msg">\Скорость верта = \</string>
+    <string name="info">Info</string>
 </resources>
