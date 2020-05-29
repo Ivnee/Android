@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">Test</string>
+    <string name="dmitrov">Dmitrov</string>
+    <string name="city_name">City name</string>
+    <string name="exit">exit</string>
+    <string name="ok">OK</string>
+    <string name="check_wind_speed">Check wind speed</string>
+    <string name="_10">+10</string>
+    <string name="sun">Завтра - солнечно</string>
+    <string name="low_cloudy">Сегодня - небольшой дождь</string>
+    <string name="_25_05_2020">25.05.2020</string>
+    <string name="back">Назад</string>
+    <string name="Info_about">\"Информация о городе \"</string>
+    <string name="rain_light">rain_light</string>
+    <string name="on_start">OnStart</string>
+    <string name="on_stop">onStop</string>
+    <string name="on_restart">onRestart</string>
+    <string name="on_resume">onResume</string>
+    <string name="on_pause">onPause</string>
+    <string name="on_destroy">onDestroy</string>
+    <string name="wind_speed_msg">\Скорость верта = \</string>
+    <string name="info">Info</string>
+    <string name="empty_city_info">Нет информации по этому городу</string>
+    <string name="moscow_info">https://ru.wikipedia.org/wiki/%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0</string>
+    <string name="dmitrov_info">https://ru.wikipedia.org/wiki/%D0%94%D0%BC%D0%B8%D1%82%D1%80%D0%BE%D0%B2</string>
+    <string name="spb_info">https://ru.wikipedia.org/wiki/%D0%A1%D0%B0%D0%BD%D0%BA%D1%82-%D0%9F%D0%B5%D1%82%D0%B5%D1%80%D0%B1%D1%83%D1%80%D0%B3</string>
+    <string name="sochi_info">https://ru.wikipedia.org/wiki/%D0%A1%D0%BE%D1%87%D0%B8</string>
+    <string name="krasnodar_info">https://ru.wikipedia.org/wiki/%D0%9A%D1%80%D0%B0%D1%81%D0%BD%D0%BE%D0%B4%D0%B0%D1%80</string>
+    <string-array name="Cities">
+        <item>Dmitrov</item>
+        <item>Moscow</item>
+        <item>Saint-Petersburg</item>
+        <item>Sochi</item>
+        <item>Krasnodar</item>
+    </string-array>
+</resources>
