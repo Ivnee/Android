@@ -1,16 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
     android:orientation="vertical">
 
-    <fragment
-        android:name="com.geek.trener.Fragments.FragmentList"
+
+    <ListView
+        android:id="@+id/cities_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+    </ListView>
+
+
+    <TextView
+        android:id="@+id/empty_text_for_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/fragment_for_vertical" />
+        android:gravity="center"
+        android:text="@string/empty_list" />
+
 
 </LinearLayout>
