@@ -7,4 +7,11 @@
     tools:context=".InfoActyvity">
 
 
+    <fragment
+        android:id="@+id/fragment_info_intent"
+        android:name="com.geek.fragmentdz.Fragments.FragmentInfo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+
 </LinearLayout>
