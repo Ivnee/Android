@@ -28,7 +28,6 @@ import java.util.Random;
 
 public class FragmentList extends Fragment implements RVonClickListener {
     private RecyclerView recyclerView;
-    private TextView emptyText;
 
     private boolean orientationLandscape;
     private int currentPosition;
@@ -70,7 +69,6 @@ public class FragmentList extends Fragment implements RVonClickListener {
 
     private void initViews(View view) {
         recyclerView = view.findViewById(R.id.cities_recycler_view);
-        emptyText = view.findViewById(R.id.empty_text_view);
     }
 
     private void initList() {

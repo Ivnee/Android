@@ -28,11 +28,9 @@ import java.util.Objects;
 
 public class FragmentInfo extends Fragment implements RVonClickListener {
     private TextView cityName, temperature, date;
-    private ImageView cityImage;
     private FrameLayout containImage;
     private int currentPosition = -1;
     private RecyclerView history;
-
 
 
     @Nullable
@@ -77,22 +75,33 @@ public class FragmentInfo extends Fragment implements RVonClickListener {
             this.cityName.setText(cityName);
             initTemperature(temp);
             createCoatOfArms(currentPosition);
+            initHistory();
+            initDate();
         }
     }
 
-    private  void initDate(){
-        SimpleDateFormat simpleDateFormat =  new SimpleDateFormat("dd.MM.yyyy");
+    private void initHistory() {
+        ArrayList<String> arr = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.default_history)));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        RecyclerDataAdapter adapter = new RecyclerDataAdapter(arr, this);
+        history.setLayoutManager(layoutManager);
+        history.setAdapter(adapter);
+    }
+
+    private void initDate() {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
         String dateText = simpleDateFormat.format(new Date(System.currentTimeMillis()));
         date.setText(dateText);
     }
+
     private void initTemperature(int temp) {
         int tempColor;
-        if(temp>0){
-            String t = "+"+String.valueOf(temp);
+        if (temp > 0) {
+            String t = "+" + String.valueOf(temp);
             temperature.setText(t);
             tempColor = ContextCompat.getColor(Objects.requireNonNull(getActivity()), R.color.yellow);
             temperature.setTextColor(tempColor);
-        }else{
+        } else {
             String t = String.valueOf(temp);
             temperature.setText(t);
             tempColor = ContextCompat.getColor(Objects.requireNonNull(getActivity()), R.color.colorPrimary);
@@ -106,12 +115,6 @@ public class FragmentInfo extends Fragment implements RVonClickListener {
         containImage.removeAllViews();
         coatOfArms.setImageResource(images.getResourceId(currentPosition, -1));
         containImage.addView(coatOfArms);
-        initDate();
-        ArrayList<String > arr= new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.default_history)));
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        RecyclerDataAdapter adapter = new RecyclerDataAdapter(arr,this);
-        history.setLayoutManager(layoutManager);
-        history.setAdapter(adapter);
     }
 
     private void initViews(View view) {
@@ -119,7 +122,7 @@ public class FragmentInfo extends Fragment implements RVonClickListener {
         cityName = view.findViewById(R.id.cityname_text_view);
         date = view.findViewById(R.id.date_text_view);
         temperature = view.findViewById(R.id.temp_text_view);
-        cityImage = view.findViewById(R.id.imageView);
+        containImage = view.findViewById(R.id.contain_image);
     }
 
     @Override
