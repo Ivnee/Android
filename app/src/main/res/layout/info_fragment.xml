@@ -29,11 +29,10 @@
         android:id="@+id/date_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="@string/default_date"
+        android:layout_marginTop="0dp"
         android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="@+id/temp_text_view"
-        app:layout_constraintTop_toBottomOf="@+id/temp_text_view" />
+        app:layout_constraintEnd_toEndOf="@+id/contain_image"
+        app:layout_constraintTop_toBottomOf="@+id/contain_image" />
 
     <TextView
         android:id="@+id/cityname_text_view"
@@ -44,6 +43,14 @@
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/history_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        app:layout_constraintStart_toStartOf="@+id/temp_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/temp_text_view" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,28 +7,31 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.geek.fragmentdz.Bus.EventBus;
-import com.geek.fragmentdz.InfoActyvity;
 import com.geek.fragmentdz.Bus.InfoContainer;
+import com.geek.fragmentdz.InfoActyvity;
 import com.geek.fragmentdz.R;
+import com.geek.fragmentdz.RVonClickListener;
+import com.geek.fragmentdz.RecyclerDataAdapter;
 
-import java.util.Objects;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
-public class FragmentList extends Fragment {
-    ListView list;
-    TextView emptyText;
+public class FragmentList extends Fragment implements RVonClickListener {
+    private RecyclerView recyclerView;
+    private TextView emptyText;
 
-    boolean orientationLandscape;
-    int currentPosition;
+    private boolean orientationLandscape;
+    private int currentPosition;
     Random rd = new Random();
 
     @Nullable
@@ -39,22 +42,24 @@ public class FragmentList extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+
         super.onViewCreated(view, savedInstanceState);
+        orientationLandscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
         initViews(view);
         initList();
+
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        orientationLandscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
-
         if (savedInstanceState != null) {
             currentPosition = savedInstanceState.getInt("position");
+
+//что я пытался сделать для сохранения данных при перевороте экрана(пробовал вставлять этот код перед созданием листа,после создания
+            //createInfoFragment();
         }
-      /*  if(orientationLandscape){
-            EventBus.getBus().post(getInfo());
-        }*/
+
     }
 
     @Override
@@ -64,27 +69,22 @@ public class FragmentList extends Fragment {
     }
 
     private void initViews(View view) {
-        list = view.findViewById(R.id.cities_list_view);
+        recyclerView = view.findViewById(R.id.cities_recycler_view);
         emptyText = view.findViewById(R.id.empty_text_view);
     }
 
     private void initList() {
-        ArrayAdapter adapter = ArrayAdapter.createFromResource(Objects.requireNonNull(getActivity()), R.array.cities, android.R.layout.simple_list_item_activated_1);
-        list.setAdapter(adapter);
-        list.setEmptyView(emptyText);
+        ArrayList<String > arr= new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.cities)));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        RecyclerDataAdapter adapter = new RecyclerDataAdapter(arr,this);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
 
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                currentPosition = position;
-                createInfoFragment();
-            }
-        });
+
     }
 
     private void createInfoFragment() {
         if (orientationLandscape) {
-            list.setItemChecked(currentPosition, true);
             EventBus.getBus().post(getInfo());
         } else {
             Intent intent = new Intent(getActivity(), InfoActyvity.class);
@@ -100,5 +100,11 @@ public class FragmentList extends Fragment {
         infoContainer.currentPosition = currentPosition;
         infoContainer.temperature = rd.nextInt(50) -25;
         return infoContainer;
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        currentPosition = position;
+        createInfoFragment();
     }
 }

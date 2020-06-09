@@ -8,6 +8,12 @@
         <item>Самара</item>
     </string-array>
 
+    <string-array name="default_history">
+        <item>Сегодня: солнечно</item>
+        <item>Завтра: ясно</item>
+        <item>Послезавтра: облачно</item>
+    </string-array>
+
     <integer-array name="array_city_imgs">
         <item>@drawable/msc</item>
         <item>@drawable/spb</item>
