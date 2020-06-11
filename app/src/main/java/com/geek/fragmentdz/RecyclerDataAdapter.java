@@ -34,6 +34,10 @@ public class RecyclerDataAdapter extends RecyclerView.Adapter<RecyclerDataAdapte
         holder.rvItem.setText(text);
         setClickOnItem(holder,position);
     }
+   /* void add(String text){  в процессе
+        data.add(text);
+        notifyItemInserted(data.size()-1);
+    }*/
 
     private void setClickOnItem(ViewHolder holder, final int position) {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
