@@ -7,7 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,18 +25,29 @@ import com.geek.fragmentdz.InfoActyvity;
 import com.geek.fragmentdz.R;
 import com.geek.fragmentdz.RVonClickListener;
 import com.geek.fragmentdz.RecyclerDataAdapter;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
+import java.util.regex.Pattern;
 
 public class FragmentList extends Fragment implements RVonClickListener {
     private RecyclerView recyclerView;
+    private MaterialButton addCityBtn;
+    private MaterialButton clearListBtn;
+    private TextInputEditText cityName;
 
     private boolean orientationLandscape;
     private int currentPosition = 0;
     private int temperature;
     Random rd = new Random();
+    private ArrayList <String> arr;
+    private RecyclerDataAdapter adapter;
+    private Pattern checkCityName =Pattern.compile("^[A-Z][a-z]{2,}$");
 
     @Nullable
     @Override
@@ -46,7 +61,26 @@ public class FragmentList extends Fragment implements RVonClickListener {
         super.onViewCreated(view, savedInstanceState);
         orientationLandscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
         initViews(view);
+        arr= new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.cities)));
         initList();
+        onBtnClickListener(view);
+        checkTextField(view);
+    }
+
+    private void checkTextField(final View view) {
+        cityName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus)return;
+                TextView tv = (TextView) v;
+                String text = tv.getText().toString();
+                if(checkCityName.matcher(text).matches()){
+                    tv.setError(null);
+                }else{
+                    tv.setError(getString(R.string.error_input_msg));
+                }
+            }
+        });
     }
 
     @Override
@@ -55,6 +89,7 @@ public class FragmentList extends Fragment implements RVonClickListener {
         if (savedInstanceState != null) {
             currentPosition = savedInstanceState.getInt("position");
             temperature = savedInstanceState.getInt("temp");
+            arr = savedInstanceState.getStringArrayList("data");
         }
     }
 
@@ -62,27 +97,29 @@ public class FragmentList extends Fragment implements RVonClickListener {
     public void onResume() {
         super.onResume();
         EventBus.getBus().post(getInfo());
+        initList();
     }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         outState.putInt("position", currentPosition);
         outState.putInt("temp",temperature);
+        outState.putStringArrayList("data",arr);
         super.onSaveInstanceState(outState);
     }
 
     private void initViews(View view) {
         recyclerView = view.findViewById(R.id.cities_recycler_view);
+        addCityBtn = view.findViewById(R.id.add_cities);
+        clearListBtn = view.findViewById(R.id.clear_cities_btn);
+        cityName = view.findViewById(R.id.city_edit_text);
     }
 
     private void initList() {
-        ArrayList<String > arr= new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.cities)));
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        RecyclerDataAdapter adapter = new RecyclerDataAdapter(arr,this);
+        adapter = new RecyclerDataAdapter(arr,this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
-
-
     }
 
     private void createInfoFragment() {
@@ -97,8 +134,8 @@ public class FragmentList extends Fragment implements RVonClickListener {
 
     private InfoContainer getInfo() {
         InfoContainer infoContainer = new InfoContainer();
-        String[] cities = getResources().getStringArray(R.array.cities);
-        infoContainer.cityName = cities[currentPosition];
+        //String[] cities = getResources().getStringArray(R.array.cities);
+        infoContainer.cityName = arr.get(currentPosition);
         infoContainer.currentPosition = currentPosition;
         infoContainer.temperature = temperature;
         return infoContainer;
@@ -109,5 +146,33 @@ public class FragmentList extends Fragment implements RVonClickListener {
         currentPosition = position;
         temperature = rd.nextInt(50) -25;
         createInfoFragment();
+    }
+
+    private void onBtnClickListener(final View view) {
+        addCityBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String text = cityName.getText().toString();
+                if(!text.isEmpty()) {
+                    adapter.add(text);
+                    cityName.setText("");
+                    String msg = getString(R.string.msg_string)+text+ getString(R.string.msg_string2);
+                    Snackbar.make(view,msg,Snackbar.LENGTH_LONG).show();
+                }
+            }
+        });
+        clearListBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Snackbar.make(view,"Отчистить список городов?",Snackbar.LENGTH_LONG).setAction(R.string.yes,
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        cityName.setText("");
+                        adapter.clear();
+                    }
+                }).show();
+            }
+        });
     }
 }

@@ -1,11 +1,35 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="materialBtnAdd">
+        <item name="android:layout_height">40dp</item>
+        <item name="android:layout_width">wrap_content</item>
+    </style>
+
+    <style name="image_layout" >
+        <item name="android:layout_width">95dp</item>
+        <item name="android:layout_height">95dp</item>
+        <item name="android:layout_margin">25dp</item>
+    </style>
+
+    <style name="info_rv" >
+        <item name="android:layout_marginTop">30dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
+        <item name="android:layout_marginStart">16dp</item>
+    </style>
+
+    <style name="ThemeSwitch">
+        <item name="android:layout_width">76dp</item>
+        <item name="android:layout_height">21dp</item>
+        <item name="android:layout_marginEnd">44dp</item>
+    </style>
+
+    <style name="AppDarkTheme" parent="Theme.MaterialComponents" />
 </resources>

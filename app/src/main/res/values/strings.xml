@@ -1,4 +1,15 @@
 <resources>
     <string name="app_name">FragmentDZ</string>
     <string name="info">Info</string>
+    <string name="developers">developers</string>
+    <string name="default_city">Moscow</string>
+    <string name="error_input_msg">Введено не корректно</string>
+    <string name="clear">Clear</string>
+    <string name="add">add</string>
+    <string name="city_name">City name</string>
+    <string name="dark">Dark</string>
+    <string name="msg_string">\"Город \"</string>
+    <string name="msg_string2">\" успешно добавлен\"</string>
+    <string name="yes">Да</string>
+    <string name="dev_text">Разработчик: Ф.И.О.</string>
 </resources>

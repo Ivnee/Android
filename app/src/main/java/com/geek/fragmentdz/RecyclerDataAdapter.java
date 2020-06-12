@@ -14,6 +14,7 @@ import java.util.ArrayList;
 public class RecyclerDataAdapter extends RecyclerView.Adapter<RecyclerDataAdapter.ViewHolder> {
     private ArrayList<String> data;
     private RVonClickListener clickListener;
+    Context context;
 
 
     public RecyclerDataAdapter(ArrayList<String> data,RVonClickListener clickListener){
@@ -23,8 +24,8 @@ public class RecyclerDataAdapter extends RecyclerView.Adapter<RecyclerDataAdapte
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
-        View view =LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_layout,parent,false);
+        context = parent.getContext();
+        View view =LayoutInflater.from(context).inflate(R.layout.rv_layout,parent,false);
         return new ViewHolder(view);
     }
 
@@ -34,10 +35,15 @@ public class RecyclerDataAdapter extends RecyclerView.Adapter<RecyclerDataAdapte
         holder.rvItem.setText(text);
         setClickOnItem(holder,position);
     }
-   /* void add(String text){  в процессе
+    public void add(String text){
         data.add(text);
-        notifyItemInserted(data.size()-1);
-    }*/
+        notifyItemInserted(data.size());
+    }
+    public void clear(){
+        data.clear();
+        notifyDataSetChanged();
+        add(context.getString(R.string.default_city));
+    }
 
     private void setClickOnItem(ViewHolder holder, final int position) {
         holder.itemView.setOnClickListener(new View.OnClickListener() {

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="cities">
-        <item>Москва</item>
-        <item>Санкт-Петербург</item>
-        <item>Екатеринбург</item>
-        <item>Новосибирск</item>
-        <item>Самара</item>
+        <item>Moscow</item>
+        <item>Dmitrov</item>
+        <item>Saratov</item>
+        <item>Volgograd</item>
+        <item>York</item>
     </string-array>
 
     <string-array name="default_history">
@@ -20,6 +20,5 @@
         <item>@drawable/red_sun</item>
         <item>@drawable/cloud_light</item>
         <item>@drawable/moon</item>
-        <item>@drawable/sunnypng</item>
     </integer-array>
 </resources>

@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <FrameLayout
         android:id="@+id/contain_image"
-        android:layout_width="95dp"
-        android:layout_height="95dp"
-        android:layout_margin="25dp"
+        style="@style/image_layout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -38,7 +35,6 @@
         android:id="@+id/cityname_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:layout_margin="20dp"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -48,23 +44,31 @@
         android:id="@+id/history_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
+        style="@style/info_rv"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.045"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/date_text_view" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/info_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="12dp"
         android:text="@string/info"
+        app:cornerRadius="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/temp_text_view" />
+
+    <Switch
+        android:id="@+id/dark_theme"
+        style="@style/ThemeSwitch"
+        android:text="@string/dark"
+        android:checked="true"
+        app:layout_constraintBottom_toBottomOf="@+id/info_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/contain_image" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

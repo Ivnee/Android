@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -25,6 +26,7 @@ import com.geek.fragmentdz.RVWeatherContainer;
 import com.geek.fragmentdz.RVonClickListener;
 import com.geek.fragmentdz.RecyclerDataAdapter;
 import com.geek.fragmentdz.RecyclerDateDataAdapter;
+import com.google.android.material.button.MaterialButton;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -37,8 +39,8 @@ public class FragmentInfo extends Fragment implements RVonClickListener {
     private FrameLayout containImage;
     private int currentPosition = -1;
     private RecyclerView history;
-    private Button info;
-
+    private MaterialButton info;
+    private Switch switchTheme;
 
     @Nullable
     @Override
@@ -51,25 +53,29 @@ public class FragmentInfo extends Fragment implements RVonClickListener {
         super.onViewCreated(view, savedInstanceState);
         containImage = view.findViewById(R.id.contain_image);
         initViews(view);
-        setInfoBtnListener(view);
+        setInfoBtnListener();
     }
 
-    private void setInfoBtnListener(View view) {
-        info.setOnClickListener(new View.OnClickListener() {
+    private void themeListener() {
+        switchTheme.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Uri url = Uri.parse("https://yandex.ru/pogoda/");
-                Intent intent = new Intent(Intent.ACTION_VIEW,url);
-                startActivity(intent);
+                if(switchTheme.isChecked()){
+                    Objects.requireNonNull(getActivity()).setTheme(R.style.AppDarkTheme);
+                    getActivity().recreate();
+                }else{
+                    Objects.requireNonNull(getActivity()).setTheme(R.style.AppTheme);
+                    getActivity().recreate();
+                }
             }
         });
+
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-
+        themeListener();
     }
 
     public void setData(String cityName, int temp, int currentPosition) {
@@ -125,7 +131,7 @@ public class FragmentInfo extends Fragment implements RVonClickListener {
         TypedArray images = getResources().obtainTypedArray(R.array.weather_img_arr);
         ImageView coatOfArms = new ImageView(getActivity());
         containImage.removeAllViews();
-        coatOfArms.setImageResource(images.getResourceId(currentPosition % images.length() , -1));
+        coatOfArms.setImageResource(images.getResourceId((currentPosition % images.length()) , -1));
         containImage.addView(coatOfArms);
     }
 
@@ -136,10 +142,24 @@ public class FragmentInfo extends Fragment implements RVonClickListener {
         date = view.findViewById(R.id.date_text_view);
         temperature = view.findViewById(R.id.temp_text_view);
         containImage = view.findViewById(R.id.contain_image);
+        switchTheme = view.findViewById(R.id.dark_theme);
     }
 
     @Override
     public void onItemClick(int position) {
         System.out.println(position);
+    }
+
+    private void setInfoBtnListener() {
+        info.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                StringBuilder sb = new StringBuilder("https://yandex.ru/pogoda/");
+                sb.append(cityName.getText());
+                Uri url = Uri.parse(sb.toString());
+                Intent intent = new Intent(Intent.ACTION_VIEW,url);
+                startActivity(intent);
+            }
+        });
     }
 }
