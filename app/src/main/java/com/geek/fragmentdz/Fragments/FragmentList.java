@@ -21,10 +21,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.geek.fragmentdz.Bus.EventBus;
 import com.geek.fragmentdz.Bus.InfoContainer;
+import com.geek.fragmentdz.GetWeatherData;
 import com.geek.fragmentdz.InfoActyvity;
 import com.geek.fragmentdz.R;
 import com.geek.fragmentdz.RVonClickListener;
 import com.geek.fragmentdz.RecyclerDataAdapter;
+import com.geek.fragmentdz.WeatherJsonData.WeatherDataController;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
@@ -44,10 +46,11 @@ public class FragmentList extends Fragment implements RVonClickListener {
     private boolean orientationLandscape;
     private int currentPosition = 0;
     private int temperature;
-    Random rd = new Random();
+    //Random rd = new Random();
     private ArrayList <String> arr;
     private RecyclerDataAdapter adapter;
     private Pattern checkCityName =Pattern.compile("^[A-Z][a-z]{2,}$");
+
 
     @Nullable
     @Override
@@ -65,22 +68,6 @@ public class FragmentList extends Fragment implements RVonClickListener {
         initList();
         onBtnClickListener(view);
         checkTextField(view);
-    }
-
-    private void checkTextField(final View view) {
-        cityName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus)return;
-                TextView tv = (TextView) v;
-                String text = tv.getText().toString();
-                if(checkCityName.matcher(text).matches()){
-                    tv.setError(null);
-                }else{
-                    tv.setError(getString(R.string.error_input_msg));
-                }
-            }
-        });
     }
 
     @Override
@@ -106,6 +93,22 @@ public class FragmentList extends Fragment implements RVonClickListener {
         outState.putInt("temp",temperature);
         outState.putStringArrayList("data",arr);
         super.onSaveInstanceState(outState);
+    }
+
+    private void checkTextField(final View view) {
+        cityName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus)return;
+                TextView tv = (TextView) v;
+                String text = tv.getText().toString();
+                if(checkCityName.matcher(text).matches()){
+                    tv.setError(null);
+                }else{
+                    tv.setError(getString(R.string.error_input_msg));
+                }
+            }
+        });
     }
 
     private void initViews(View view) {
@@ -134,7 +137,6 @@ public class FragmentList extends Fragment implements RVonClickListener {
 
     private InfoContainer getInfo() {
         InfoContainer infoContainer = new InfoContainer();
-        //String[] cities = getResources().getStringArray(R.array.cities);
         infoContainer.cityName = arr.get(currentPosition);
         infoContainer.currentPosition = currentPosition;
         infoContainer.temperature = temperature;
@@ -143,9 +145,11 @@ public class FragmentList extends Fragment implements RVonClickListener {
 
     @Override
     public void onItemClick(int position) {
+        GetWeatherData getWeatherData = new GetWeatherData(arr.get(currentPosition));
         currentPosition = position;
-        temperature = rd.nextInt(50) -25;
+        temperature = getWeatherData.getTemp();
         createInfoFragment();
+        Toast.makeText(getActivity(),getWeatherData.getCityName()+ "++" + getWeatherData.getTemp(),Toast.LENGTH_SHORT).show();
     }
 
     private void onBtnClickListener(final View view) {

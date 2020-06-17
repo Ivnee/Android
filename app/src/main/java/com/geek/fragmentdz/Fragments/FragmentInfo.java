@@ -69,7 +69,6 @@ public class FragmentInfo extends Fragment implements RVonClickListener {
                 }
             }
         });
-
     }
 
     @Override
