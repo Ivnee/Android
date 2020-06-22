@@ -1,22 +1,22 @@
 package com.geek.fragmentdz.WeatherJsonData;
 
 public class Sys {
-    private long sunrise;
-    private long sunset;
+    private double sunrise;
+    private double sunset;
 
-    public void setSunrise(int sunrise) {
+    public void setSunrise(double sunrise) {
         this.sunrise = sunrise;
     }
 
-    public void setSunset(int sunset) {
+    public void setSunset(double sunset) {
         this.sunset = sunset;
     }
 
-    public long getSunrise() {
+    public double getSunrise() {
         return sunrise;
     }
 
-    public long getSunset() {
+    public double getSunset() {
         return sunset;
     }
 

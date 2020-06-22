@@ -11,10 +11,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class RecyclerDateDataAdapter extends RecyclerView.Adapter<RecyclerDateDataAdapter.ViewHolder> {
-    ArrayList<RVWeatherContainer> data = new ArrayList<>();
+public class RecycleTimeWeatherAdapter extends RecyclerView.Adapter<RecycleTimeWeatherAdapter.ViewHolder> {
+    ArrayList<RVWeatherContainer> data ;
 
-    public RecyclerDateDataAdapter(ArrayList<RVWeatherContainer> data) {
+    public RecycleTimeWeatherAdapter(ArrayList<RVWeatherContainer> data) {
         this.data = data;
     }
 
@@ -27,7 +27,7 @@ public class RecyclerDateDataAdapter extends RecyclerView.Adapter<RecyclerDateDa
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.time.setText(data.get(position).Time);
+        holder.time.setText(data.get(position).time);
         holder.img.setImageDrawable(data.get(position).image);
         holder.temp.setText(data.get(position).temp);
 

@@ -6,6 +6,7 @@
         <item>Saratov</item>
         <item>Volgograd</item>
         <item>York</item>
+        <item>Berlin</item>
     </string-array>
 
     <string-array name="default_history">

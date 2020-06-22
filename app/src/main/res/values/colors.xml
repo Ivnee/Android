@@ -4,4 +4,6 @@
     <color name="colorPrimaryDark">#0960CA</color>
     <color name="colorAccent">#000000</color>
     <color name="yellow">#E1AF19</color>
+    <color name="nav_head_color">#B0290049</color>
+
 </resources>

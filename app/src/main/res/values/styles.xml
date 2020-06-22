@@ -31,5 +31,5 @@
         <item name="android:layout_marginEnd">44dp</item>
     </style>
 
-    <style name="AppDarkTheme" parent="Theme.MaterialComponents" />
+    <style name="AppDarkTheme" parent="Theme.MaterialComponents.NoActionBar" />
 </resources>

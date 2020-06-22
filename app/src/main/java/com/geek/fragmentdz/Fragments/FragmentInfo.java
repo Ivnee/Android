@@ -1,14 +1,11 @@
 package com.geek.fragmentdz.Fragments;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.TypedArray;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Switch;
@@ -21,18 +18,17 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.geek.fragmentdz.Bus.InfoContainer;
 import com.geek.fragmentdz.R;
 import com.geek.fragmentdz.RVWeatherContainer;
 import com.geek.fragmentdz.RVonClickListener;
-import com.geek.fragmentdz.RecyclerDataAdapter;
-import com.geek.fragmentdz.RecyclerDateDataAdapter;
+import com.geek.fragmentdz.RecycleTimeWeatherAdapter;
 import com.google.android.material.button.MaterialButton;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.Objects;
 
 public class FragmentInfo extends Fragment implements RVonClickListener {
     private TextView cityName, temperature, date;
@@ -41,6 +37,9 @@ public class FragmentInfo extends Fragment implements RVonClickListener {
     private RecyclerView history;
     private MaterialButton info;
     private Switch switchTheme;
+    private double sunrise;
+    private double sunset;
+    private int clouds;
 
     @Nullable
     @Override
@@ -60,11 +59,10 @@ public class FragmentInfo extends Fragment implements RVonClickListener {
         switchTheme.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(switchTheme.isChecked()){
-                    Objects.requireNonNull(getActivity()).setTheme(R.style.AppDarkTheme);
+                if (switchTheme.isChecked()) {
+                    requireActivity().setTheme(R.style.AppDarkTheme);
                     getActivity().recreate();
-                }else{
-                    Objects.requireNonNull(getActivity()).setTheme(R.style.AppTheme);
+                } else {
                     getActivity().recreate();
                 }
             }
@@ -77,30 +75,32 @@ public class FragmentInfo extends Fragment implements RVonClickListener {
         themeListener();
     }
 
-    public void setData(String cityName, int temp, int currentPosition) {
-        if (this.currentPosition != currentPosition) {
-            this.currentPosition = currentPosition;
-            this.cityName.setText(cityName);
-            initTemperature(temp);
-            createWeatherImg(currentPosition);
+    public void setData(InfoContainer container) {
+        if (this.currentPosition != container.currentPosition) {
+            this.currentPosition = container.currentPosition;
+            this.cityName.setText(container.cityName);
+            this.sunrise = container.sunrise;
+            this.sunset = container.sunset;
+            this.clouds = container.clouds;
+            initTemperature(container.temperature);
+            createWeatherImg(sunrise, sunset, clouds);
             initWeatherRV();
             initDate();
         }
     }
 
 
-
     private void initWeatherRV() {
         ArrayList<RVWeatherContainer> arr = new ArrayList<RVWeatherContainer>(Arrays.asList
-                (new RVWeatherContainer("15:00", Objects.requireNonNull(getActivity()).getDrawable(R.drawable.icon1),"+24"),
-                        new RVWeatherContainer("16:00", Objects.requireNonNull(getActivity()).getDrawable(R.drawable.icon1),"+22"),
-                        new RVWeatherContainer("17:00", Objects.requireNonNull(getActivity()).getDrawable(R.drawable.icon2),"+21"),
-                        new RVWeatherContainer("18:00", Objects.requireNonNull(getActivity()).getDrawable(R.drawable.icon2),"+19"),
-                        new RVWeatherContainer("19:00", Objects.requireNonNull(getActivity()).getDrawable(R.drawable.icon3),"+18"),
-                        new RVWeatherContainer("20:00", Objects.requireNonNull(getActivity()).getDrawable(R.drawable.icon3),"+16"),
-                        new RVWeatherContainer("21:00", Objects.requireNonNull(getActivity()).getDrawable(R.drawable.icon4),"+15")));
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false);
-        RecyclerDateDataAdapter adapter = new RecyclerDateDataAdapter(arr);
+                (new RVWeatherContainer("15:00", requireActivity().getDrawable(R.drawable.icon1), "+24"),
+                        new RVWeatherContainer("16:00", requireActivity().getDrawable(R.drawable.icon1), "+22"),
+                        new RVWeatherContainer("17:00", requireActivity().getDrawable(R.drawable.icon2), "+21"),
+                        new RVWeatherContainer("18:00", requireActivity().getDrawable(R.drawable.icon2), "+19"),
+                        new RVWeatherContainer("19:00", requireActivity().getDrawable(R.drawable.icon3), "+18"),
+                        new RVWeatherContainer("20:00", requireActivity().getDrawable(R.drawable.icon3), "+16"),
+                        new RVWeatherContainer("21:00", requireActivity().getDrawable(R.drawable.icon4), "+15")));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        RecycleTimeWeatherAdapter adapter = new RecycleTimeWeatherAdapter(arr);
         history.setLayoutManager(layoutManager);
         history.setAdapter(adapter);
     }
@@ -114,29 +114,41 @@ public class FragmentInfo extends Fragment implements RVonClickListener {
     private void initTemperature(int temp) {
         int tempColor;
         if (temp > 0) {
-            String t = "+" + String.valueOf(temp);
+            String t = "+" + temp;
             temperature.setText(t);
-            tempColor = ContextCompat.getColor(Objects.requireNonNull(getActivity()), R.color.yellow);
+            tempColor = ContextCompat.getColor(requireActivity(), R.color.yellow);
             temperature.setTextColor(tempColor);
         } else {
             String t = String.valueOf(temp);
             temperature.setText(t);
-            tempColor = ContextCompat.getColor(Objects.requireNonNull(getActivity()), R.color.colorPrimary);
+            tempColor = ContextCompat.getColor(requireActivity(), R.color.colorPrimary);
             temperature.setTextColor(tempColor);
         }
     }
 
-    private void createWeatherImg(int currentPosition) {
-        TypedArray images = getResources().obtainTypedArray(R.array.weather_img_arr);
-        ImageView coatOfArms = new ImageView(getActivity());
+    private void createWeatherImg(double sunrise, double sunset, int clouds) {
+        long currentTime = new Date().getTime();
         containImage.removeAllViews();
-        coatOfArms.setImageResource(images.getResourceId((currentPosition % images.length()) , -1));
-        containImage.addView(coatOfArms);
+        final ImageView img = new ImageView(getActivity());
+        if (currentTime >= (sunrise * 1000) && currentTime < (sunset * 1000)) {
+            img.setImageResource(R.drawable.sun2);
+            if (clouds >= 20 & clouds < 40) {
+                img.setImageResource(R.drawable.sun);
+            } else if (clouds >= 40) {
+                img.setImageResource(R.drawable.clouds);
+            }
+        } else {
+            img.setImageResource(R.drawable.moon);
+            if (clouds >= 20) {
+                img.setImageResource(R.drawable.cloud);
+            }
+        }
+        containImage.addView(img);
     }
 
     private void initViews(View view) {
         info = view.findViewById(R.id.info_btn);
-        history = view.findViewById(R.id.history_list);
+        history = view.findViewById(R.id.time_weather_list);
         cityName = view.findViewById(R.id.cityname_text_view);
         date = view.findViewById(R.id.date_text_view);
         temperature = view.findViewById(R.id.temp_text_view);
@@ -156,9 +168,11 @@ public class FragmentInfo extends Fragment implements RVonClickListener {
                 StringBuilder sb = new StringBuilder("https://yandex.ru/pogoda/");
                 sb.append(cityName.getText());
                 Uri url = Uri.parse(sb.toString());
-                Intent intent = new Intent(Intent.ACTION_VIEW,url);
+                Intent intent = new Intent(Intent.ACTION_VIEW, url);
                 startActivity(intent);
             }
         });
     }
+
+
 }

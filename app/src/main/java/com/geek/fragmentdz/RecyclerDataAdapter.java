@@ -37,7 +37,7 @@ public class RecyclerDataAdapter extends RecyclerView.Adapter<RecyclerDataAdapte
     }
     public void add(String text){
         data.add(text);
-        notifyItemInserted(data.size());
+        notifyItemInserted(data.size()-1);
     }
     public void clear(){
         data.clear();

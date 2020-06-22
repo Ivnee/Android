@@ -12,4 +12,10 @@
     <string name="msg_string2">\" успешно добавлен\"</string>
     <string name="yes">Да</string>
     <string name="dev_text">Разработчик: Ф.И.О.</string>
+    <string name="weather_controller">Weather menu</string>
+    <string name="home">Home</string>
+    <string name="history">History</string>
+    <string name="delete_cities">Отчистить список городов?</string>
+    <string name="divider">____________________________________________</string>
+    <string name="temp_is">\" температура = \"</string>
 </resources>

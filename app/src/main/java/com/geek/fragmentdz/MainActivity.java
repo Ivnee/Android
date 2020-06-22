@@ -9,10 +9,18 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 
 import com.geek.fragmentdz.Bus.EventBus;
 import com.geek.fragmentdz.Bus.InfoContainer;
 import com.geek.fragmentdz.Fragments.FragmentInfo;
+import com.geek.fragmentdz.Fragments.HistoryFragment;
+import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.squareup.otto.Subscribe;
 
@@ -20,11 +28,24 @@ import java.util.Objects;
 import java.util.zip.Inflater;
 
 public class MainActivity extends AppCompatActivity {
+    AppBarConfiguration appBarConfiguration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        initNavigation();
+    }
+
+    private void initNavigation() {
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        appBarConfiguration = new AppBarConfiguration.Builder(R.id.nav_home,R.id.nav_history).setDrawerLayout(drawer).build();
+        NavController navController = Navigation.findNavController(this,R.id.fragment_list);
+        NavigationUI.setupActionBarWithNavController(this,navController, appBarConfiguration);
+        NavigationUI.setupWithNavController(navigationView,navController);
     }
 
     @Override
@@ -37,6 +58,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         EventBus.getBus().unregister(this);
         super.onStop();
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        NavController navController = Navigation.findNavController(this, R.id.fragment_list);
+        return NavigationUI.navigateUp(navController, appBarConfiguration)
+                ||super.onSupportNavigateUp();
     }
 
     @Override
@@ -66,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
     public void setInfoFragment(InfoContainer container) {
         if (isLandscapeOrientation() ) {
             FragmentInfo fragment = (FragmentInfo) getSupportFragmentManager().findFragmentById(R.id.fragment_info);
-            Objects.requireNonNull(fragment).setData(container.cityName, container.temperature, container.currentPosition);
+            Objects.requireNonNull(fragment).setData(container);
         }
     }
 }

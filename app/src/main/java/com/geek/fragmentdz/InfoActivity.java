@@ -11,10 +11,11 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.geek.fragmentdz.Bus.InfoContainer;
 import com.geek.fragmentdz.Fragments.FragmentInfo;
+import com.geek.fragmentdz.Fragments.HistoryFragment;
 
 import java.util.Objects;
 
-public class InfoActyvity extends AppCompatActivity {
+public class InfoActivity extends AppCompatActivity {
 
 
     @Override
@@ -24,7 +25,6 @@ public class InfoActyvity extends AppCompatActivity {
         setInfoFragment();
         if (isLandscapeOrientation()) {
             finish();
-            return;
         }
     }
 
@@ -37,7 +37,7 @@ public class InfoActyvity extends AppCompatActivity {
         InfoContainer infoContainer = (InfoContainer) intent.getSerializableExtra("info");
         FragmentInfo fragment = (FragmentInfo) getSupportFragmentManager().findFragmentById(R.id.fragment_info_intent);
         if (fragment != null) {
-            fragment.setData(infoContainer.cityName, infoContainer.temperature, infoContainer.currentPosition);
+            fragment.setData(Objects.requireNonNull(infoContainer));
         }
     }
 
