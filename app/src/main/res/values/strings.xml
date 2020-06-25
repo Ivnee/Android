@@ -18,4 +18,9 @@
     <string name="delete_cities">Отчистить список городов?</string>
     <string name="divider">____________________________________________</string>
     <string name="temp_is">\" температура = \"</string>
+    <string name="Error">Ошибка!</string>
+    <string name="connect_error">Ошибка подключения №</string>
+    <string name="ok">OK</string>
+    <string name="dialog_err_tag">ErrorDialog</string>
+    <string name="add_city">Добавить город?</string>
 </resources>

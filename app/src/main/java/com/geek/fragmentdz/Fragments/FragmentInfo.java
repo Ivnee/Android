@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.geek.fragmentdz.Bus.InfoContainer;
+import com.geek.fragmentdz.DialogErrorFragment;
 import com.geek.fragmentdz.R;
 import com.geek.fragmentdz.RVWeatherContainer;
 import com.geek.fragmentdz.RVonClickListener;
@@ -37,8 +38,8 @@ public class FragmentInfo extends Fragment implements RVonClickListener {
     private RecyclerView history;
     private MaterialButton info;
     private Switch switchTheme;
-    private double sunrise;
-    private double sunset;
+    private long sunrise;
+    private long sunset;
     private int clouds;
 
     @Nullable
@@ -77,6 +78,11 @@ public class FragmentInfo extends Fragment implements RVonClickListener {
 
     public void setData(InfoContainer container) {
         if (this.currentPosition != container.currentPosition) {
+            int cod = container.cod;
+            if (cod == 200) {
+                DialogErrorFragment def = new DialogErrorFragment(cod);
+                def.show(getActivity().getSupportFragmentManager(), getString(R.string.dialog_err_tag));
+            }
             this.currentPosition = container.currentPosition;
             this.cityName.setText(container.cityName);
             this.sunrise = container.sunrise;

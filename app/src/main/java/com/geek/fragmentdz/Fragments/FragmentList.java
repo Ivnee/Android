@@ -1,5 +1,7 @@
 package com.geek.fragmentdz.Fragments;
 
+import android.app.Notification;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -7,10 +9,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -43,9 +48,10 @@ public class FragmentList extends Fragment implements RVonClickListener, OnLoadL
     private boolean orientationLandscape;
     private int currentPosition = 0;
     private int temperature;
-    private double sunrise;
-    private double sunset;
+    private long sunrise;
+    private long sunset;
     private int clouds;
+    private int cod;
     private ArrayList<String> arr;
     private RecyclerDataAdapter adapter;
     private Pattern checkCityName = Pattern.compile("^[A-Z][a-z]{2,}$");
@@ -122,6 +128,9 @@ public class FragmentList extends Fragment implements RVonClickListener, OnLoadL
     private void initList() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         adapter = new RecyclerDataAdapter(arr, this);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
+                layoutManager.getOrientation());
+        recyclerView.addItemDecoration(dividerItemDecoration);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
     }
@@ -144,13 +153,14 @@ public class FragmentList extends Fragment implements RVonClickListener, OnLoadL
         infoContainer.sunrise = this.sunrise;
         infoContainer.sunset = this.sunset;
         infoContainer.clouds = this.clouds;
+        infoContainer.cod = this.cod;
         return infoContainer;
     }
 
     @Override
     public void onItemClick(int position) {
-        WeatherData getWeatherData = new WeatherData(arr.get(currentPosition), this);
         currentPosition = position;
+        WeatherData getWeatherData = new WeatherData(arr.get(currentPosition), this);
     }
 
     @Override
@@ -159,6 +169,7 @@ public class FragmentList extends Fragment implements RVonClickListener, OnLoadL
         sunrise = weatherDataController.getSys().getSunrise();
         sunset = weatherDataController.getSys().getSunset();
         clouds = weatherDataController.getClouds().getAll();
+        cod = weatherDataController.getCod();
         String infoHistory = sendHistory();
         HistoryContainer.getInstance().addHistory(infoHistory);
         createInfoFragment();
@@ -174,26 +185,33 @@ public class FragmentList extends Fragment implements RVonClickListener, OnLoadL
         addCityBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String text = cityName.getText().toString();
+                final String text = cityName.getText().toString();
                 if (!text.isEmpty()) {
                     adapter.add(text);
                     cityName.setText("");
                     String msg = getString(R.string.msg_string) + text + getString(R.string.msg_string2);
-                    Snackbar.make(view, msg, Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(view, msg, Snackbar.LENGTH_SHORT).show();
                 }
             }
         });
         clearListBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Snackbar.make(view, R.string.delete_cities, Snackbar.LENGTH_LONG).setAction(R.string.yes,
-                        new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                cityName.setText("");
-                                adapter.clear();
-                            }
-                        }).show();
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle(R.string.delete_cities).setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        cityName.setText("");
+                        adapter.clear();
+                    }
+                }).setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                builder.create().show();
             }
         });
     }
