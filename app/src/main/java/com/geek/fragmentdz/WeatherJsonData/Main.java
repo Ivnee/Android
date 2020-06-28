@@ -1,11 +1,14 @@
 package com.geek.fragmentdz.WeatherJsonData;
 
-public class Main {
-    private float temp;
-    private float feels_like;
-    private float temp_min;
-    private float temp_max;
+import com.google.gson.annotations.SerializedName;
 
+public class Main {
+    @SerializedName("temp") public int temp;
+    @SerializedName("feels_like") public float feels_like;
+    @SerializedName("temp_min") public float temp_min;
+    @SerializedName("temp_max") public float temp_max;
+
+/*
     public void setTemp(float temp) {
         this.temp = temp;
     }
@@ -37,5 +40,6 @@ public class Main {
     public float getTemp_max() {
         return temp_max;
     }
+*/
 
 }

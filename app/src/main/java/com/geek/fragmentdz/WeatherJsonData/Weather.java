@@ -1,8 +1,11 @@
 package com.geek.fragmentdz.WeatherJsonData;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Weather {
-    private int id;
-    private String main;
+    @SerializedName("id") public int id;
+    @SerializedName("main") public String main;
+/*
 
 
     public void setId(int id) {
@@ -20,5 +23,6 @@ public class Weather {
     public String getMain() {
         return main;
     }
+*/
 
 }

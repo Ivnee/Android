@@ -1,14 +1,16 @@
 package com.geek.fragmentdz.WeatherJsonData;
 
-public class WeatherDataController {
-    private Weather []weather;
-    private Main main;
-    private Clouds clouds;
-    private Sys sys;
-    private String name;
-    private int cod;
+import com.google.gson.annotations.SerializedName;
 
-    public void setWeather(Weather[] weather) {
+public class WeatherDataController {
+    @SerializedName("weather") public Weather []weather;
+    @SerializedName("main") public Main main;
+    @SerializedName("clouds") public Clouds clouds;
+    @SerializedName("sys") public Sys sys;
+    @SerializedName("name") public String name;
+    @SerializedName("cod") public int cod;
+
+ /*   public void setWeather(Weather[] weather) {
         this.weather = weather;
     }
 
@@ -54,5 +56,5 @@ public class WeatherDataController {
 
     public int getCod() {
         return cod;
-    }
+    }*/
 }

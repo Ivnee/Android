@@ -1,9 +1,12 @@
 package com.geek.fragmentdz.WeatherJsonData;
 
-public class Sys {
-    private long sunrise;
-    private long sunset;
+import com.google.gson.annotations.SerializedName;
 
+public class Sys {
+    @SerializedName("sunrise") public long sunrise;
+    @SerializedName("sunset") public long sunset;
+
+/*
     public void setSunrise(long sunrise) {
         this.sunrise = sunrise;
     }
@@ -20,5 +23,6 @@ public class Sys {
         return sunset;
     }
 
+*/
 
 }

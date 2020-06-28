@@ -2,40 +2,59 @@ package com.geek.fragmentdz;
 
 import android.os.Handler;
 
+import androidx.annotation.NonNull;
+
 import com.geek.fragmentdz.Bus.InfoContainer;
 import com.geek.fragmentdz.WeatherJsonData.WeatherDataController;
 
-public class ParsingWeatherData implements OnLoadListener {
-    OnSaveDataListener onSaveDataListener;
-    String city;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class ParsingWeatherData {/*
+    private static final String WEATHER_URL = "https://api.openweathermap.org/data/2.5/weather?q=%s&units=metric&appid=%s";*/
+    private static final String METRIC_SYSTEM = "metric";
+    private static final String KEY = "132fce3d69979894a33cf504082ed717";
+
 
     public ParsingWeatherData(OnSaveDataListener onSaveDataListener, String city) {
-        this.onSaveDataListener = onSaveDataListener;
-        this.city = city;
-        WeatherData weatherData = new WeatherData(city, this);
+        parsData(city,onSaveDataListener);
     }
 
-    @Override
-    public void onReadyData(final WeatherDataController weatherDataController) {
-        final InfoContainer infoContainer = new InfoContainer();
-        final Handler handler = new Handler();
-        new Thread(new Runnable() {
+
+    private void parsData(String city , OnSaveDataListener onSaveDataListener) {
+        WeatherData.getInstance().getAPI().loadWeather(city,KEY,METRIC_SYSTEM).enqueue(new Callback<WeatherDataController>() {
             @Override
-            public void run() {
-                infoContainer.cod = weatherDataController.getCod();
-                infoContainer.clouds = weatherDataController.getClouds().getAll();
-                infoContainer.cityName = city;
-                infoContainer.temperature = weatherDataController.getMain().getTemp();
-                infoContainer.sunrise = weatherDataController.getSys().getSunrise();
-                infoContainer.sunset = weatherDataController.getSys().getSunset();
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        setWeatherData(infoContainer, onSaveDataListener);
-                    }
-                });
+            public void onResponse(@NonNull Call<WeatherDataController> call, @NonNull Response<WeatherDataController> response) {
+                if (response.body() != null && response.isSuccessful()) {
+                    final InfoContainer infoContainer = new InfoContainer();
+                    final WeatherDataController model = response.body();
+                    final Handler handler = new Handler();
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            infoContainer.cod = model.cod;
+                            infoContainer.clouds = model.clouds.all;
+                            infoContainer.cityName = city;
+                            infoContainer.temperature = model.main.temp;
+                            infoContainer.sunrise = model.sys.sunrise;
+                            infoContainer.sunset = model.sys.sunset;
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    setWeatherData(infoContainer, onSaveDataListener);
+                                }
+                            });
+                        }
+                    }).start();
+                }
             }
-        }).start();
+
+            @Override
+            public void onFailure(Call<WeatherDataController> call, Throwable t) {
+
+            }
+        });
     }
 
     private void setWeatherData(InfoContainer infoContainer, OnSaveDataListener onSaveDataListener) {
