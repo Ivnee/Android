@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 public class RecycleTimeWeatherAdapter extends RecyclerView.Adapter<RecycleTimeWeatherAdapter.ViewHolder> {
-    ArrayList<RVWeatherContainer> data ;
+    ArrayList<RVWeatherContainer> data;
 
     public RecycleTimeWeatherAdapter(ArrayList<RVWeatherContainer> data) {
         this.data = data;
@@ -21,7 +21,7 @@ public class RecycleTimeWeatherAdapter extends RecyclerView.Adapter<RecycleTimeW
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_weather,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_weather, parent, false);
         return new ViewHolder(view);
     }
 
@@ -38,10 +38,10 @@ public class RecycleTimeWeatherAdapter extends RecyclerView.Adapter<RecycleTimeW
         return data.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder{
-        TextView time ;
-        ImageView img ;
-        TextView temp ;
+    class ViewHolder extends RecyclerView.ViewHolder {
+        TextView time;
+        ImageView img;
+        TextView temp;
 
 
         public ViewHolder(@NonNull View itemView) {

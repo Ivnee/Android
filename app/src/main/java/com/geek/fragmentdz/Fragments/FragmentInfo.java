@@ -79,7 +79,7 @@ public class FragmentInfo extends Fragment implements RVonClickListener {
     public void setData(InfoContainer container) {
         if (this.currentPosition != container.currentPosition) {
             int cod = container.cod;
-            if (cod == 200) {
+            if (cod != 200) {
                 DialogErrorFragment def = new DialogErrorFragment(cod);
                 def.show(getActivity().getSupportFragmentManager(), getString(R.string.dialog_err_tag));
             }

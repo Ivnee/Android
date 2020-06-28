@@ -6,6 +6,7 @@ public class RVWeatherContainer {
     String time;
     Drawable image;
     String temp;
+
     public RVWeatherContainer(String time, Drawable image, String temp) {
         this.time = time;
         this.image = image;

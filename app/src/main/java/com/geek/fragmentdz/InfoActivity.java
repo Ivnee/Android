@@ -4,14 +4,10 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.geek.fragmentdz.Bus.InfoContainer;
 import com.geek.fragmentdz.Fragments.FragmentInfo;
-import com.geek.fragmentdz.Fragments.HistoryFragment;
 
 import java.util.Objects;
 

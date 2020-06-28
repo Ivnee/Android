@@ -1,10 +1,10 @@
 package com.geek.fragmentdz.Fragments;
 
-import android.app.Notification;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,13 +22,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.geek.fragmentdz.Bus.EventBus;
 import com.geek.fragmentdz.Bus.HistoryContainer;
 import com.geek.fragmentdz.Bus.InfoContainer;
-import com.geek.fragmentdz.WeatherData;
 import com.geek.fragmentdz.InfoActivity;
-import com.geek.fragmentdz.OnLoadListener;
+import com.geek.fragmentdz.OnSaveDataListener;
+import com.geek.fragmentdz.ParsingWeatherData;
 import com.geek.fragmentdz.R;
 import com.geek.fragmentdz.RVonClickListener;
 import com.geek.fragmentdz.RecyclerDataAdapter;
-import com.geek.fragmentdz.WeatherJsonData.WeatherDataController;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
@@ -39,7 +38,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.regex.Pattern;
 
-public class FragmentList extends Fragment implements RVonClickListener, OnLoadListener {
+public class FragmentList extends Fragment implements RVonClickListener, OnSaveDataListener {
     private RecyclerView recyclerView;
     private MaterialButton addCityBtn;
     private MaterialButton clearListBtn;
@@ -59,8 +58,8 @@ public class FragmentList extends Fragment implements RVonClickListener, OnLoadL
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Log.d("tag","onCreate");
         return inflater.inflate(R.layout.list_fragment, container, false);
-
     }
 
     @Override
@@ -160,19 +159,19 @@ public class FragmentList extends Fragment implements RVonClickListener, OnLoadL
     @Override
     public void onItemClick(int position) {
         currentPosition = position;
-        WeatherData getWeatherData = new WeatherData(arr.get(currentPosition), this);
+        ParsingWeatherData parsingWeatherData = new ParsingWeatherData(this, arr.get(currentPosition));
     }
 
     @Override
-    public void onReadyData(WeatherDataController weatherDataController) {
-        temperature = weatherDataController.getMain().getTemp();
-        sunrise = weatherDataController.getSys().getSunrise();
-        sunset = weatherDataController.getSys().getSunset();
-        clouds = weatherDataController.getClouds().getAll();
-        cod = weatherDataController.getCod();
-        String infoHistory = sendHistory();
-        HistoryContainer.getInstance().addHistory(infoHistory);
+    public void onClickSaveData(InfoContainer infoContainer) {
+        temperature = infoContainer.temperature;
+        sunrise = infoContainer.sunrise;
+        sunset = infoContainer.sunset;
+        clouds = infoContainer.clouds;
+        cod = infoContainer.cod;
+        HistoryContainer.getInstance().addHistory(sendHistory());
         createInfoFragment();
+
     }
 
     private String sendHistory() {
@@ -215,4 +214,6 @@ public class FragmentList extends Fragment implements RVonClickListener, OnLoadL
             }
         });
     }
+
+
 }

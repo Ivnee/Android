@@ -5,7 +5,6 @@ import android.os.Handler;
 
 import androidx.annotation.RequiresApi;
 
-import com.geek.fragmentdz.Fragments.FragmentList;
 import com.geek.fragmentdz.WeatherJsonData.WeatherDataController;
 import com.google.gson.Gson;
 
@@ -20,9 +19,9 @@ public class WeatherData {
     private static final String WEATHER_URL = "https://api.openweathermap.org/data/2.5/weather?q=%s&units=metric&appid=%s";
     private static final String KEY = "132fce3d69979894a33cf504082ed717";
 
-    private FragmentList fragmentList;
+    private OnLoadListener onLoadListener;
 
-    public WeatherData(String city, final FragmentList fragmentList) {
+    public WeatherData(String city, final OnLoadListener onLoadListener) {
         try {
             final URL url = new URL(String.format(WEATHER_URL, city, KEY));
             final Handler handler = new Handler();
@@ -47,7 +46,7 @@ public class WeatherData {
                         handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                setWeatherData(weatherDataController,fragmentList);
+                                setWeatherData(weatherDataController, onLoadListener);
                             }
                         });
 
@@ -65,8 +64,8 @@ public class WeatherData {
         }
     }
 
-    private void setWeatherData(WeatherDataController weatherDataController,FragmentList fragmentList) {
-        fragmentList.onReadyData(weatherDataController);
+    private void setWeatherData(WeatherDataController weatherDataController, OnLoadListener onLoadListener) {
+        onLoadListener.onReadyData(weatherDataController);
     }
 
 }

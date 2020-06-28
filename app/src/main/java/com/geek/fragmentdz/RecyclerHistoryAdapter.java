@@ -8,8 +8,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 
 public class RecyclerHistoryAdapter extends RecyclerView.Adapter<RecyclerHistoryAdapter.ViewHolder> {
@@ -24,7 +22,7 @@ public class RecyclerHistoryAdapter extends RecyclerView.Adapter<RecyclerHistory
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_history,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_history, parent, false);
         return new ViewHolder(view);
     }
 
@@ -36,10 +34,13 @@ public class RecyclerHistoryAdapter extends RecyclerView.Adapter<RecyclerHistory
     }
 
     @Override
-    public int getItemCount() { return data == null ? 0: data.size(); }
+    public int getItemCount() {
+        return data == null ? 0 : data.size();
+    }
 
     class ViewHolder extends RecyclerView.ViewHolder {
         TextView historyTextItem;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             historyTextItem = itemView.findViewById(R.id.rv_history_item);

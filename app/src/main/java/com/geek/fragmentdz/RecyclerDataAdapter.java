@@ -17,15 +17,16 @@ public class RecyclerDataAdapter extends RecyclerView.Adapter<RecyclerDataAdapte
     Context context;
 
 
-    public RecyclerDataAdapter(ArrayList<String> data,RVonClickListener clickListener){
+    public RecyclerDataAdapter(ArrayList<String> data, RVonClickListener clickListener) {
         this.data = data;
         this.clickListener = clickListener;
     }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
-        View view =LayoutInflater.from(context).inflate(R.layout.rv_layout,parent,false);
+        View view = LayoutInflater.from(context).inflate(R.layout.rv_layout, parent, false);
         return new ViewHolder(view);
     }
 
@@ -33,13 +34,15 @@ public class RecyclerDataAdapter extends RecyclerView.Adapter<RecyclerDataAdapte
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         String text = data.get(position);
         holder.rvItem.setText(text);
-        setClickOnItem(holder,position);
+        setClickOnItem(holder, position);
     }
-    public void add(String text){
+
+    public void add(String text) {
         data.add(text);
-        notifyItemInserted(data.size()-1);
+        notifyItemInserted(data.size() - 1);
     }
-    public void clear(){
+
+    public void clear() {
         data.clear();
         notifyDataSetChanged();
         add(context.getString(R.string.default_city));
@@ -49,7 +52,7 @@ public class RecyclerDataAdapter extends RecyclerView.Adapter<RecyclerDataAdapte
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(clickListener != null){
+                if (clickListener != null) {
                     clickListener.onItemClick(position);
                 }
             }
@@ -59,7 +62,7 @@ public class RecyclerDataAdapter extends RecyclerView.Adapter<RecyclerDataAdapte
 
     @Override
     public int getItemCount() {
-        return data == null ? 0: data.size();
+        return data == null ? 0 : data.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

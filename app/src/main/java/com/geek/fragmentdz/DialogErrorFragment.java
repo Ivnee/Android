@@ -15,6 +15,7 @@ public class DialogErrorFragment extends DialogFragment {
     private String cod;
     private TextView msg;
     private Button okBtn;
+
     public DialogErrorFragment(int cod) {
         this.cod = String.valueOf(cod);
     }
@@ -34,7 +35,7 @@ public class DialogErrorFragment extends DialogFragment {
     }
 
     private void setMsg() {
-        msg.setText((getString(R.string.connect_error) + cod));
+        msg.setText((getString(R.string.connect_error) + "\n" + cod));
     }
 
     private void onBtnClickListener() {
