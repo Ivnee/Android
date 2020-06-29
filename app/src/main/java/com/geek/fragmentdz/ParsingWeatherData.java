@@ -30,22 +30,14 @@ public class ParsingWeatherData {/*
                     final InfoContainer infoContainer = new InfoContainer();
                     final WeatherDataController model = response.body();
                     final Handler handler = new Handler();
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            infoContainer.cod = model.cod;
-                            infoContainer.clouds = model.clouds.all;
-                            infoContainer.cityName = city;
-                            infoContainer.temperature = model.main.temp;
-                            infoContainer.sunrise = model.sys.sunrise;
-                            infoContainer.sunset = model.sys.sunset;
-                            handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    setWeatherData(infoContainer, onSaveDataListener);
-                                }
-                            });
-                        }
+                    new Thread(() -> {
+                        infoContainer.cod = model.cod;
+                        infoContainer.clouds = model.clouds.all;
+                        infoContainer.cityName = city;
+                        infoContainer.temperature = model.main.temp;
+                        infoContainer.sunrise = model.sys.sunrise;
+                        infoContainer.sunset = model.sys.sunset;
+                        handler.post(() -> setWeatherData(infoContainer, onSaveDataListener));
                     }).start();
                 }
             }

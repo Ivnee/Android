@@ -25,6 +25,7 @@ import com.geek.fragmentdz.RVWeatherContainer;
 import com.geek.fragmentdz.RVonClickListener;
 import com.geek.fragmentdz.RecycleTimeWeatherAdapter;
 import com.google.android.material.button.MaterialButton;
+import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -137,11 +138,14 @@ public class FragmentInfo extends Fragment implements RVonClickListener {
         containImage.removeAllViews();
         final ImageView img = new ImageView(getActivity());
         if (currentTime >= (sunrise * 1000) && currentTime < (sunset * 1000)) {
-            img.setImageResource(R.drawable.sun2);
+            setPicassoImg("http://pngimg.com/uploads/sun/sun_PNG13414.png",img);
+            //img.setImageResource(R.drawable.sun2);
             if (clouds >= 20 & clouds < 40) {
-                img.setImageResource(R.drawable.sun);
+                setPicassoImg("http://pngimg.com/uploads/sun/sun_PNG13411.png",img);
+                //img.setImageResource(R.drawable.sun);
             } else if (clouds >= 40) {
-                img.setImageResource(R.drawable.clouds);
+                setPicassoImg("http://pngimg.com/uploads/cloud/cloud_PNG6.png",img);
+               // img.setImageResource(R.drawable.clouds);
             }
         } else {
             img.setImageResource(R.drawable.moon);
@@ -150,6 +154,12 @@ public class FragmentInfo extends Fragment implements RVonClickListener {
             }
         }
         containImage.addView(img);
+    }
+
+    private void setPicassoImg(String url,ImageView img) {
+        Picasso.get().load(url)
+                .placeholder(R.drawable.ic_launcher_background)
+                .into(img);
     }
 
     private void initViews(View view) {

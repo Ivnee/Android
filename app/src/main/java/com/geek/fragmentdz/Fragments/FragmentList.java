@@ -3,6 +3,7 @@ package com.geek.fragmentdz.Fragments;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.icu.text.IDNA;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -134,25 +135,18 @@ public class FragmentList extends Fragment implements RVonClickListener, OnSaveD
         recyclerView.setAdapter(adapter);
     }
 
-    private void createInfoFragment() {
+    private void createInfoFragment(InfoContainer infoContainer) {
         if (orientationLandscape) {
-            EventBus.getBus().post(getInfo());
+            EventBus.getBus().post(getInfo(infoContainer));
         } else {
             Intent intent = new Intent(getActivity(), InfoActivity.class);
-            intent.putExtra("info", getInfo());
+            intent.putExtra("info", getInfo(infoContainer));
             startActivity(intent);
         }
     }
 
-    private InfoContainer getInfo() {
-        InfoContainer infoContainer = new InfoContainer();
-        infoContainer.cityName = arr.get(currentPosition);
+    private InfoContainer getInfo(InfoContainer infoContainer) {
         infoContainer.currentPosition = this.currentPosition;
-        infoContainer.temperature = this.temperature;
-        infoContainer.sunrise = this.sunrise;
-        infoContainer.sunset = this.sunset;
-        infoContainer.clouds = this.clouds;
-        infoContainer.cod = this.cod;
         return infoContainer;
     }
 
@@ -165,12 +159,12 @@ public class FragmentList extends Fragment implements RVonClickListener, OnSaveD
     @Override
     public void onClickSaveData(InfoContainer infoContainer) {
         temperature = infoContainer.temperature;
-        sunrise = infoContainer.sunrise;
+/*        sunrise = infoContainer.sunrise;
         sunset = infoContainer.sunset;
         clouds = infoContainer.clouds;
-        cod = infoContainer.cod;
+        cod = infoContainer.cod;*/
         HistoryContainer.getInstance().addHistory(sendHistory());
-        createInfoFragment();
+        createInfoFragment(infoContainer);
 
     }
 

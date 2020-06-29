@@ -8,7 +8,7 @@ import retrofit2.http.Query;
 
 public interface RetrofitWeatherQuery {
     @GET("data/2.5/weather")
-    Call<WeatherDataController> loadWeather(@Query("q")String city
-            ,@Query("appid")String keyApi
-            ,@Query("units")String units);
+    Call<WeatherDataController> loadWeather(@Query("q") String city,
+                                              @Query("appid") String keyApi,
+                                              @Query("units") String units);
 }
