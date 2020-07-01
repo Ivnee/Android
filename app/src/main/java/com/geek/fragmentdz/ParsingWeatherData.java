@@ -34,7 +34,7 @@ public class ParsingWeatherData {/*
                         infoContainer.cod = model.cod;
                         infoContainer.clouds = model.clouds.all;
                         infoContainer.cityName = city;
-                        infoContainer.temperature = model.main.temp;
+                        infoContainer.temperature = (int) model.main.temp;
                         infoContainer.sunrise = model.sys.sunrise;
                         infoContainer.sunset = model.sys.sunset;
                         handler.post(() -> setWeatherData(infoContainer, onSaveDataListener));
@@ -44,7 +44,7 @@ public class ParsingWeatherData {/*
 
             @Override
             public void onFailure(Call<WeatherDataController> call, Throwable t) {
-
+                t.printStackTrace();
             }
         });
     }

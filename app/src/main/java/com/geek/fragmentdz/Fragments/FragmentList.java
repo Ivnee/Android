@@ -2,27 +2,29 @@ package com.geek.fragmentdz.Fragments;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.icu.text.IDNA;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.geek.fragmentdz.AppHistoryDB;
 import com.geek.fragmentdz.Bus.EventBus;
-import com.geek.fragmentdz.Bus.HistoryContainer;
 import com.geek.fragmentdz.Bus.InfoContainer;
+import com.geek.fragmentdz.History;
+import com.geek.fragmentdz.HistoryDao;
 import com.geek.fragmentdz.InfoActivity;
 import com.geek.fragmentdz.OnSaveDataListener;
 import com.geek.fragmentdz.ParsingWeatherData;
@@ -37,6 +39,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Objects;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.regex.Pattern;
 
 public class FragmentList extends Fragment implements RVonClickListener, OnSaveDataListener {
@@ -46,20 +51,19 @@ public class FragmentList extends Fragment implements RVonClickListener, OnSaveD
     private TextInputEditText cityName;
 
     private boolean orientationLandscape;
-    private int currentPosition = 0;
+    private int currentPosition;
     private int temperature;
-    private long sunrise;
-    private long sunset;
-    private int clouds;
-    private int cod;
+    private String keyForPref = "position";
     private ArrayList<String> arr;
     private RecyclerDataAdapter adapter;
     private Pattern checkCityName = Pattern.compile("^[A-Z][a-z]{2,}$");
+    private ExecutorService executorService = Executors.newSingleThreadExecutor();
+    private SharedPreferences prefs;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.d("tag","onCreate");
+        Log.d("tag", "onCreate");
         return inflater.inflate(R.layout.list_fragment, container, false);
     }
 
@@ -68,10 +72,17 @@ public class FragmentList extends Fragment implements RVonClickListener, OnSaveD
         super.onViewCreated(view, savedInstanceState);
         orientationLandscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
         initViews(view);
+        initShearedPrefs();
         arr = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.cities)));
         initList();
         onBtnClickListener(view);
         checkTextField(view);
+    }
+
+    private void initShearedPrefs() {
+        prefs= PreferenceManager.getDefaultSharedPreferences(requireActivity().getApplicationContext());
+        currentPosition = prefs.getInt(keyForPref,0);
+
     }
 
 
@@ -79,7 +90,6 @@ public class FragmentList extends Fragment implements RVonClickListener, OnSaveD
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if (savedInstanceState != null) {
-            currentPosition = savedInstanceState.getInt("position");
             temperature = savedInstanceState.getInt("temp");
             arr = savedInstanceState.getStringArrayList("data");
         }
@@ -96,7 +106,6 @@ public class FragmentList extends Fragment implements RVonClickListener, OnSaveD
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putInt("position", currentPosition);
         outState.putInt("temp", temperature);
         outState.putStringArrayList("data", arr);
         super.onSaveInstanceState(outState);
@@ -159,20 +168,25 @@ public class FragmentList extends Fragment implements RVonClickListener, OnSaveD
     @Override
     public void onClickSaveData(InfoContainer infoContainer) {
         temperature = infoContainer.temperature;
-/*        sunrise = infoContainer.sunrise;
-        sunset = infoContainer.sunset;
-        clouds = infoContainer.clouds;
-        cod = infoContainer.cod;*/
-        HistoryContainer.getInstance().addHistory(sendHistory());
+        insertHistoryDB();
         createInfoFragment(infoContainer);
 
     }
 
-    private String sendHistory() {
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-        String time = sdf.format(new Date(System.currentTimeMillis()));
-        return time + ": " + arr.get(currentPosition) + getString(R.string.temp_is) + temperature;
+    private void insertHistoryDB() {
+        executorService.execute(() -> {
+            HistoryDao historyDao = AppHistoryDB.getInstance().getHistoryBuilderDB();
+            History history = new History();
+            history.cityName = arr.get(currentPosition);
+            String temp = String.valueOf(temperature);
+            history.temperature = temp;
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+            String time = sdf.format(new Date(System.currentTimeMillis()));
+            history.date = time;
+            historyDao.insertHistory(history);
+        });
     }
+
 
     private void onBtnClickListener(final View view) {
         addCityBtn.setOnClickListener(new View.OnClickListener() {
@@ -207,6 +221,14 @@ public class FragmentList extends Fragment implements RVonClickListener, OnSaveD
                 builder.create().show();
             }
         });
+    }
+
+    @Override
+    public void onStop() {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt(keyForPref,currentPosition);
+        editor.apply();
+        super.onStop();
     }
 
 

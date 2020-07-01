@@ -139,18 +139,17 @@ public class FragmentInfo extends Fragment implements RVonClickListener {
         final ImageView img = new ImageView(getActivity());
         if (currentTime >= (sunrise * 1000) && currentTime < (sunset * 1000)) {
             setPicassoImg("http://pngimg.com/uploads/sun/sun_PNG13414.png",img);
-            //img.setImageResource(R.drawable.sun2);
             if (clouds >= 20 & clouds < 40) {
                 setPicassoImg("http://pngimg.com/uploads/sun/sun_PNG13411.png",img);
-                //img.setImageResource(R.drawable.sun);
-            } else if (clouds >= 40) {
-                setPicassoImg("http://pngimg.com/uploads/cloud/cloud_PNG6.png",img);
-               // img.setImageResource(R.drawable.clouds);
+            } else if (clouds >= 40 && clouds < 55) {
+                img.setImageResource(R.drawable.clouds);
+            }else if(clouds >= 55 ){
+                setPicassoImg("http://pngimg.com/uploads/cloud/cloud_PNG31.png",img);
             }
         } else {
             img.setImageResource(R.drawable.moon);
-            if (clouds >= 20) {
-                img.setImageResource(R.drawable.cloud);
+            if (clouds >= 30) {
+                setPicassoImg("http://pngimg.com/uploads/cloud/cloud_PNG31.png",img);
             }
         }
         containImage.addView(img);
@@ -158,7 +157,7 @@ public class FragmentInfo extends Fragment implements RVonClickListener {
 
     private void setPicassoImg(String url,ImageView img) {
         Picasso.get().load(url)
-                .placeholder(R.drawable.ic_launcher_background)
+                .placeholder(R.drawable.load)
                 .into(img);
     }
 

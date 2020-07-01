@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class Main {
     @SerializedName("temp") @Expose
-    public int temp;
+    public float temp;
     @SerializedName("feels_like") @Expose
     public float feels_like;
     @SerializedName("temp_min") @Expose
