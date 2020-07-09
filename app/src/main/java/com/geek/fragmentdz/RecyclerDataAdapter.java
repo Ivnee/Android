@@ -9,15 +9,17 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.geek.fragmentdz.citiesList.CitiesList;
+
 import java.util.ArrayList;
 
 public class RecyclerDataAdapter extends RecyclerView.Adapter<RecyclerDataAdapter.ViewHolder> {
-    private ArrayList<String> data;
+    private ArrayList<CitiesList> data;
     private RVonClickListener clickListener;
     Context context;
 
 
-    public RecyclerDataAdapter(ArrayList<String> data, RVonClickListener clickListener) {
+    public RecyclerDataAdapter(ArrayList<CitiesList> data, RVonClickListener clickListener) {
         this.data = data;
         this.clickListener = clickListener;
     }
@@ -32,20 +34,22 @@ public class RecyclerDataAdapter extends RecyclerView.Adapter<RecyclerDataAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        String text = data.get(position);
+        String text = data.get(position).cityName;
         holder.rvItem.setText(text);
         setClickOnItem(holder, position);
     }
 
-    public void add(String text) {
-        data.add(text);
+    public void add(CitiesList city) {
+        data.add(city);
         notifyItemInserted(data.size() - 1);
     }
 
     public void clear() {
         data.clear();
         notifyDataSetChanged();
-        add(context.getString(R.string.default_city));
+        CitiesList citiesList = new CitiesList();
+        citiesList.cityName = "Moscow";
+        add(citiesList);
     }
 
     private void setClickOnItem(ViewHolder holder, final int position) {

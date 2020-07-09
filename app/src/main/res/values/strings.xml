@@ -24,4 +24,10 @@
     <string name="dialog_err_tag">ErrorDialog</string>
     <string name="add_city">Добавить город?</string>
     <string name="Delete">Delete</string>
+    <string name="warning">Warning!</string>
+    <string name="connection_problems">проблемы с сетью,проверьте подключение</string>
+    <string name="low_battery">низкий заряд батареи</string>
+    <string name="key_for_info_fragment">info</string>
+    <string name="place_not_found">place not found</string>
+    <string name="Cancel">cancel</string>
 </resources>

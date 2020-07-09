@@ -31,11 +31,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Objects;
 
 public class FragmentInfo extends Fragment implements RVonClickListener {
     private TextView cityName, temperature, date;
     private FrameLayout containImage;
-    private int currentPosition = -1;
+    private int currentPosition;
     private RecyclerView history;
     private MaterialButton info;
     private Switch switchTheme;
@@ -82,7 +83,7 @@ public class FragmentInfo extends Fragment implements RVonClickListener {
             int cod = container.cod;
             if (cod != 200) {
                 DialogErrorFragment def = new DialogErrorFragment(cod);
-                def.show(getActivity().getSupportFragmentManager(), getString(R.string.dialog_err_tag));
+                def.show(Objects.requireNonNull(getActivity()).getSupportFragmentManager(), getString(R.string.dialog_err_tag));
             }
             this.currentPosition = container.currentPosition;
             this.cityName.setText(container.cityName);

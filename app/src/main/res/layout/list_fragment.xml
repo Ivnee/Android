@@ -12,6 +12,15 @@
           android:layout_height="match_parent"
           android:orientation="vertical">
 
+          <com.google.android.material.button.MaterialButton
+              android:id="@+id/my_place_btn"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              app:cornerRadius="10dp"
+              style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+              android:text="Моё местоположение"
+              android:textAllCaps="false"/>
+
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"

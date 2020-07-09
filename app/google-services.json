@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "758572766632",
+    "firebase_url": "https://weatherinfogb.firebaseio.com",
+    "project_id": "weatherinfogb",
+    "storage_bucket": "weatherinfogb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:758572766632:android:48234efdbb3ec49ed1799d",
+        "android_client_info": {
+          "package_name": "com.geek.fragmentdz"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "758572766632-tv1c9gvq9ol83u3d7gsiats8slfeeq41.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZsmOYIe3u7dlKOVGy8yJspyC7QhTz0Ok"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "758572766632-tv1c9gvq9ol83u3d7gsiats8slfeeq41.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

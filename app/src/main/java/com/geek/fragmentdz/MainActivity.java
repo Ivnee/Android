@@ -1,6 +1,12 @@
 package com.geek.fragmentdz;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,7 +30,9 @@ import com.squareup.otto.Subscribe;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
-    AppBarConfiguration appBarConfiguration;
+    private BatteryBroadcastReceiver batteryReceiver = new BatteryBroadcastReceiver();
+    private AppBarConfiguration appBarConfiguration;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,11 +56,26 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         EventBus.getBus().register(this);
+        registerReceiver(batteryReceiver,new IntentFilter(Intent.ACTION_BATTERY_LOW));
+        initNotification();
+    }
+
+    private void initNotification() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            int importance = NotificationManager.IMPORTANCE_LOW;
+            NotificationChannel channel = new NotificationChannel("2", "name", importance);
+            if (notificationManager != null) {
+                notificationManager.createNotificationChannel(channel);
+            }
+        }
+
     }
 
     @Override
     protected void onStop() {
         EventBus.getBus().unregister(this);
+        unregisterReceiver(batteryReceiver);
         super.onStop();
     }
 

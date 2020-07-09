@@ -4,9 +4,12 @@ import android.app.Application;
 
 import androidx.room.Room;
 
+import com.geek.fragmentdz.citiesList.CitiesListDao;
+
 public class AppHistoryDB extends Application {
     private static AppHistoryDB instance;
     private HistoryBuilderDB db;
+    private HistoryBuilderDB dbCities;
     public static AppHistoryDB getInstance(){
         return instance;
     }
@@ -16,9 +19,13 @@ public class AppHistoryDB extends Application {
         super.onCreate();
         instance = this;
         db= Room.databaseBuilder(getApplicationContext(),HistoryBuilderDB.class,"builderDB").build();
+        dbCities = Room.databaseBuilder(getApplicationContext(),HistoryBuilderDB.class,"citiesDB").build();
     }
 
     public HistoryDao getHistoryBuilderDB(){
         return db.getHistoryDao();
+    }
+    public CitiesListDao getCitiesListDao() {
+        return dbCities.getCitiesListDao();
     }
 }

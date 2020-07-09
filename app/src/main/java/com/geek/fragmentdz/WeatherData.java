@@ -20,7 +20,10 @@ public class WeatherData {
     private WeatherData() {
         API = createAdapter();
     }
-    public RetrofitWeatherQuery getAPI(){return API;}
+
+    public RetrofitWeatherQuery getAPI() {
+        return API;
+    }
 
     private RetrofitWeatherQuery createAdapter() {
         Retrofit retrofit = new Retrofit.Builder().baseUrl("https://api.openweathermap.org/")
