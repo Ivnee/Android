@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         EventBus.getBus().register(this);
-        registerReceiver(batteryReceiver,new IntentFilter(Intent.ACTION_BATTERY_LOW));
+        registerReceiver(batteryReceiver, new IntentFilter(Intent.ACTION_BATTERY_LOW));
         initNotification();
     }
 

@@ -5,8 +5,6 @@ import androidx.room.Entity;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-import java.text.StringCharacterIterator;
-
 @Entity(indices = {@Index(CitiesList.CITY_NAME)})
 public class CitiesList {
     public final static String ID = "id";

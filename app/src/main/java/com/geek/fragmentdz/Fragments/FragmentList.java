@@ -59,7 +59,6 @@ import java.util.concurrent.Executors;
 import java.util.regex.Pattern;
 
 import static android.content.Context.LOCATION_SERVICE;
-import static android.content.Context.SHORTCUT_SERVICE;
 
 public class FragmentList extends Fragment implements RVonClickListener, OnSaveDataListener {
     private RecyclerView recyclerView;
@@ -131,7 +130,7 @@ public class FragmentList extends Fragment implements RVonClickListener, OnSaveD
             if (permissionGranted) {
                 getMyLocation();
             } else {
-                Toast.makeText(getActivity(),"asd",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "asd", Toast.LENGTH_SHORT).show();
                 currentPosition = 0;
             }
         }
@@ -261,7 +260,7 @@ public class FragmentList extends Fragment implements RVonClickListener, OnSaveD
 
     @Override
     public void onItemClick(int position) {
-        currentPosition = position ;
+        currentPosition = position;
         if (currentPosition >= 0) {
             currentCityName = arrCities.get(currentPosition).cityName;
             ParsingWeatherData parsingWeatherData = new ParsingWeatherData(this, currentCityName, this.getActivity());
@@ -327,11 +326,11 @@ public class FragmentList extends Fragment implements RVonClickListener, OnSaveD
                     currentPosition = 0;
                     CitiesList citiesList = new CitiesList();
                     citiesList.cityName = "Moscow";
-                    arrCities.add(citiesList);
                     cityName.setText("");
                     adapter.clear();
                     new Thread(() -> {
                         citiesListDao.deleteCitiesList();
+                        citiesListDao.insertCity(citiesList);
                     }).start();
                 }
             }).setNegativeButton(R.string.Cancel, new DialogInterface.OnClickListener() {

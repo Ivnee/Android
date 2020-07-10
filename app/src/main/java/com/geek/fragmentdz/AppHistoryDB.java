@@ -10,7 +10,8 @@ public class AppHistoryDB extends Application {
     private static AppHistoryDB instance;
     private HistoryBuilderDB db;
     private HistoryBuilderDB dbCities;
-    public static AppHistoryDB getInstance(){
+
+    public static AppHistoryDB getInstance() {
         return instance;
     }
 
@@ -18,13 +19,14 @@ public class AppHistoryDB extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
-        db= Room.databaseBuilder(getApplicationContext(),HistoryBuilderDB.class,"builderDB").fallbackToDestructiveMigration().build();
-        dbCities = Room.databaseBuilder(getApplicationContext(),HistoryBuilderDB.class,"citiesDB").fallbackToDestructiveMigration().build();
+        db = Room.databaseBuilder(getApplicationContext(), HistoryBuilderDB.class, "builderDB").fallbackToDestructiveMigration().build();
+        dbCities = Room.databaseBuilder(getApplicationContext(), HistoryBuilderDB.class, "citiesDB").fallbackToDestructiveMigration().build();
     }
 
-    public HistoryDao getHistoryBuilderDB(){
+    public HistoryDao getHistoryBuilderDB() {
         return db.getHistoryDao();
     }
+
     public CitiesListDao getCitiesListDao() {
         return dbCities.getCitiesListDao();
     }

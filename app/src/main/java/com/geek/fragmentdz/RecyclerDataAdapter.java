@@ -46,10 +46,10 @@ public class RecyclerDataAdapter extends RecyclerView.Adapter<RecyclerDataAdapte
 
     public void clear() {
         data.clear();
-        notifyDataSetChanged();
         CitiesList citiesList = new CitiesList();
         citiesList.cityName = "Moscow";
         add(citiesList);
+        notifyDataSetChanged();
     }
 
     private void setClickOnItem(ViewHolder holder, final int position) {

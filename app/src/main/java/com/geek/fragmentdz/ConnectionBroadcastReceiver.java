@@ -11,7 +11,8 @@ import androidx.core.app.NotificationCompat;
 import java.util.Objects;
 
 public class ConnectionBroadcastReceiver extends BroadcastReceiver {
-    private int msgID =1000;
+    private int msgID = 1000;
+
     @Override
     public void onReceive(Context context, Intent intent) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "2")
