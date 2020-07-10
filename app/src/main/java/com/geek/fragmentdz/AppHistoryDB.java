@@ -18,8 +18,8 @@ public class AppHistoryDB extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
-        db= Room.databaseBuilder(getApplicationContext(),HistoryBuilderDB.class,"builderDB").build();
-        dbCities = Room.databaseBuilder(getApplicationContext(),HistoryBuilderDB.class,"citiesDB").build();
+        db= Room.databaseBuilder(getApplicationContext(),HistoryBuilderDB.class,"builderDB").fallbackToDestructiveMigration().build();
+        dbCities = Room.databaseBuilder(getApplicationContext(),HistoryBuilderDB.class,"citiesDB").fallbackToDestructiveMigration().build();
     }
 
     public HistoryDao getHistoryBuilderDB(){

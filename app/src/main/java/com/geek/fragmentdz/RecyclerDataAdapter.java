@@ -41,7 +41,7 @@ public class RecyclerDataAdapter extends RecyclerView.Adapter<RecyclerDataAdapte
 
     public void add(CitiesList city) {
         data.add(city);
-        notifyItemInserted(data.size() - 1);
+        notifyItemInserted(data.size());
     }
 
     public void clear() {

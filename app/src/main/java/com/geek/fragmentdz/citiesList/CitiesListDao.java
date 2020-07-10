@@ -12,7 +12,7 @@ public interface CitiesListDao {
     long insertCity(CitiesList citiesList);
 
     @Query("SELECT * FROM CitiesList")
-    List<CitiesList> getFullCitiesLiist();
+    List<CitiesList> getFullCitiesList();
 
     @Query("DELETE FROM CitiesList WHERE id > 0")
     void deleteCitiesList();

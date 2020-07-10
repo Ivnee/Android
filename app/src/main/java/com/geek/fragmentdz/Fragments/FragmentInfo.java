@@ -36,7 +36,7 @@ import java.util.Objects;
 public class FragmentInfo extends Fragment implements RVonClickListener {
     private TextView cityName, temperature, date;
     private FrameLayout containImage;
-    private int currentPosition;
+    private int currentPosition = -10;
     private RecyclerView history;
     private MaterialButton info;
     private Switch switchTheme;

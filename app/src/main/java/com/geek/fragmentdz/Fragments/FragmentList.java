@@ -12,6 +12,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,6 +59,7 @@ import java.util.concurrent.Executors;
 import java.util.regex.Pattern;
 
 import static android.content.Context.LOCATION_SERVICE;
+import static android.content.Context.SHORTCUT_SERVICE;
 
 public class FragmentList extends Fragment implements RVonClickListener, OnSaveDataListener {
     private RecyclerView recyclerView;
@@ -77,7 +79,7 @@ public class FragmentList extends Fragment implements RVonClickListener, OnSaveD
 
     private RecyclerDataAdapter adapter;
     private Pattern checkCityName = Pattern.compile("^[A-Z][a-z]{2,}$");
-    private ExecutorService executorService = Executors.newFixedThreadPool(2);
+    private ExecutorService executorService = Executors.newFixedThreadPool(3);
     private SharedPreferences prefs;
     private CitiesListDao citiesListDao;
 
@@ -103,17 +105,15 @@ public class FragmentList extends Fragment implements RVonClickListener, OnSaveD
     }
 
     private void initCitiesDB() {
-        executorService.execute(() -> {
-            citiesListDao = AppHistoryDB.getInstance().getCitiesListDao();
-        });
+        new Thread(() -> citiesListDao = AppHistoryDB.getInstance().getCitiesListDao()).start();
     }
 
 
     private void onMyPosBtnClickListener() {
-        myPositionBtn.setOnClickListener(v -> checkPermossionAndGetMyLocation());
+        myPositionBtn.setOnClickListener(v -> checkPermissionAndGetMyLocation());
     }
 
-    private void checkPermossionAndGetMyLocation() {
+    private void checkPermissionAndGetMyLocation() {
         if (ActivityCompat.checkSelfPermission(Objects.requireNonNull(getActivity()), Manifest.permission.ACCESS_FINE_LOCATION) !=
                 PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(getActivity(),
@@ -131,6 +131,7 @@ public class FragmentList extends Fragment implements RVonClickListener, OnSaveD
             if (permissionGranted) {
                 getMyLocation();
             } else {
+                Toast.makeText(getActivity(),"asd",Toast.LENGTH_SHORT).show();
                 currentPosition = 0;
             }
         }
@@ -178,32 +179,31 @@ public class FragmentList extends Fragment implements RVonClickListener, OnSaveD
     @Override
     public void onResume() {
         super.onResume();
-
-        executorService.execute(new Runnable() {
-            @Override
-            public void run() {
-                //Set<String> citiesSet = prefs.getStringSet("key", null);
-                ArrayList<CitiesList> citiesArr = (ArrayList<CitiesList>) citiesListDao.getFullCitiesLiist();
-                if (citiesArr.isEmpty()) {
-           /* arr = new ArrayList<>();
-            arr.addAll(Objects.requireNonNull(prefs.getStringSet("key", null)));*/
-                    arrCities = new ArrayList<>();
-                    arrCities = citiesArr;
-                } else {
-                    arr = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.cities)));
-                    for (int i = 0; i < arr.size(); i++) {
-                        CitiesList citiesList = new CitiesList();
-                        citiesList.cityName = arr.get(i);
-                        citiesListDao.insertCity(citiesList);
-                    }
+        Handler handler = new Handler();
+        executorService.execute(() -> {
+            citiesListDao = AppHistoryDB.getInstance().getCitiesListDao();
+            ArrayList<CitiesList> arrayFromDB = (ArrayList<CitiesList>) citiesListDao.getFullCitiesList();
+            if (!arrayFromDB.isEmpty()) {
+                arrCities = new ArrayList<>();
+                arrCities = arrayFromDB;
+            } else {
+                arr = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.cities)));
+                for (int i = 0; i < arr.size(); i++) {
+                    CitiesList citiesList = new CitiesList();
+                    citiesList.cityName = arr.get(i);
+                    arrayFromDB.add(citiesList);
+                    citiesListDao.insertCity(citiesList);
                 }
             }
-        });
+            handler.post(() -> {
+                initList();
+                if (orientationLandscape) {
+                    onItemClick(currentPosition);
+                }
 
-        if (orientationLandscape) {
-            onItemClick(currentPosition);
-        }
-        initList();
+            });
+
+        });
     }
 
     @Override
@@ -236,7 +236,6 @@ public class FragmentList extends Fragment implements RVonClickListener, OnSaveD
 
     private void initList() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        arrCities = (ArrayList<CitiesList>) citiesListDao.getFullCitiesLiist();
         adapter = new RecyclerDataAdapter(arrCities, this);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
                 layoutManager.getOrientation());
@@ -262,12 +261,12 @@ public class FragmentList extends Fragment implements RVonClickListener, OnSaveD
 
     @Override
     public void onItemClick(int position) {
-        currentPosition = position;
+        currentPosition = position ;
         if (currentPosition >= 0) {
             currentCityName = arrCities.get(currentPosition).cityName;
             ParsingWeatherData parsingWeatherData = new ParsingWeatherData(this, currentCityName, this.getActivity());
         } else {
-            checkPermossionAndGetMyLocation();
+            checkPermissionAndGetMyLocation();
         }
     }
 
@@ -298,13 +297,19 @@ public class FragmentList extends Fragment implements RVonClickListener, OnSaveD
         addCityBtn.setOnClickListener(v -> {
             final String text = Objects.requireNonNull(cityName.getText()).toString();
             if (!text.isEmpty()) {
+                Handler handler = new Handler();
                 executorService.execute(() -> {
-                    CitiesList citiesList = new CitiesList();
-                    citiesList.cityName = text;
-                    citiesListDao.insertCity(citiesList);
-                    adapter.add(citiesList);
+                    CitiesList cities = new CitiesList();
+                    cities.cityName = text;
+                    citiesListDao.insertCity(cities);
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            adapter.add(cities);
+                            cityName.setText("");
+                        }
+                    });
                 });
-                cityName.setText("");
                 String msg = getString(R.string.msg_string) + text + getString(R.string.msg_string2);
                 Snackbar.make(view, msg, Snackbar.LENGTH_SHORT).show();
             }
@@ -319,6 +324,10 @@ public class FragmentList extends Fragment implements RVonClickListener, OnSaveD
             builder.setTitle(R.string.delete_cities).setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    currentPosition = 0;
+                    CitiesList citiesList = new CitiesList();
+                    citiesList.cityName = "Moscow";
+                    arrCities.add(citiesList);
                     cityName.setText("");
                     adapter.clear();
                     new Thread(() -> {
@@ -339,8 +348,6 @@ public class FragmentList extends Fragment implements RVonClickListener, OnSaveD
     public void onStop() {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putInt(keyForPrefPosition, currentPosition);
-        // Set<String> citiesSet = new LinkedHashSet<>(arr);
-        //editor.putStringSet("key", citiesSet);
         editor.apply();
         super.onStop();
     }

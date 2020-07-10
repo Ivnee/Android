@@ -2,6 +2,7 @@ package com.geek.fragmentdz.Fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,13 +69,19 @@ public class HistoryFragment extends Fragment {
     }
 
     private void initList() {
+        Handler handler = new Handler();
         new Thread(() -> {
             historyDao = AppHistoryDB.getInstance().getHistoryBuilderDB();
             arr = (ArrayList<History>) historyDao.getFullHistory();
             LinearLayoutManager layoutManager = new LinearLayoutManager(context, RecyclerView.VERTICAL, true);
             adapter = new RecyclerHistoryAdapter(arr);
-            recyclerView.setLayoutManager(layoutManager);
-            recyclerView.setAdapter(adapter);
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    recyclerView.setLayoutManager(layoutManager);
+                    recyclerView.setAdapter(adapter);
+                }
+            });
         }).start();
     }
 }
