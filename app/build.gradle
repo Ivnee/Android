@@ -20,9 +20,21 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
     compileOptions {
         targetCompatibility = "8"
         sourceCompatibility = "8"
+    }
+    flavorDimensions 'view'
+    productFlavors {
+        demo {
+            dimension = 'view'
+            versionNameSuffix = '.demo'
+        }
+        master {
+            dimension = 'view'
+            versionNameSuffix = '.master'
+        }
     }
 
 }
@@ -37,6 +49,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.squareup.retrofit2:retrofit:2.8.2'
     implementation 'com.squareup.retrofit2:converter-gson:2.8.2'
+    implementation 'com.google.android.gms:play-services-auth:18.0.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'androidx.navigation:navigation-fragment:2.3.0'
     implementation 'androidx.navigation:navigation-ui:2.3.0'
